@@ -9,6 +9,7 @@ public class BankAccount {
     private final String accountName;
     private final Person accountOwner;
     private BigDecimal balance;
+    private AccountHistory history;
 
     public BankAccount(String accountName, Person accountOwner) {
         this.accountNo = nextAccountNo++;
@@ -22,9 +23,10 @@ public class BankAccount {
        - use "firstname lastname" of accountOwner as the accountName;
     */
     public BankAccount(Person accountOwner) {
+        this.accountNo = nextAccountNo++;
         this.accountOwner = accountOwner;
-        // ToDo: add your code here
-        throw new RuntimeException(); // ** remove this line
+        this.accountName = accountOwner.getFirstname() + " " + accountOwner.getLastname();
+        this.balance = new BigDecimal(0);
     }
     
     public BankAccount deposit(double amount) {
@@ -37,6 +39,9 @@ public class BankAccount {
         if (amount<=0) return null;
         if (balance.doubleValue()<amount) return null;
         balance = balance.subtract(new BigDecimal(amount));
+        /*ToDo :
+        accountHistory ...
+        */
         return this;
     }
     
@@ -47,6 +52,15 @@ public class BankAccount {
     */
     public BankAccount transferTo(BankAccount to, double amount) {
         // ToDo: add your code here
+        if(amount <=0) return null;
+        if(balance.doubleValue()<amount) return null;
+        //if(withdraw(amount)==null) return null;
+        balance = balance.subtract(new BigDecimal(amount));
+        to.balance = to.balance.add(new BigDecimal(amount));
+        /*ToDo :
+        accountHistory ...
+        */
+        
         return this;
     }
 
