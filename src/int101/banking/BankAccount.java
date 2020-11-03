@@ -9,13 +9,16 @@ public class BankAccount {
     private final String accountName;
     private final Person accountOwner;
     private BigDecimal balance;
-    private AccountHistory history;
+    private AccountHistory[] history;
+    private int historyNum;
 
     public BankAccount(String accountName, Person accountOwner) {
         this.accountNo = nextAccountNo++;
         this.accountName = accountName;
         this.accountOwner = accountOwner;
         this.balance = new BigDecimal(0);
+        //this.history = new AccountHistory[0];
+        this.history[historyNum++].append(new AccountTransaction(TransactionType.OPEN,0));
     }
 
     /* ToDo: 
@@ -27,11 +30,14 @@ public class BankAccount {
         this.accountOwner = accountOwner;
         this.accountName = accountOwner.getFirstname() + " " + accountOwner.getLastname();
         this.balance = new BigDecimal(0);
+        this.history = new AccountHistory[0];
     }
     
     public BankAccount deposit(double amount) {
         if (amount<=0) return null;
         balance = balance.add(new BigDecimal(amount));
+        
+        this.history[historyNum++].append(new AccountTransaction(TransactionType.DEPOSIT,amount));
         return this;
     }
     
@@ -42,6 +48,7 @@ public class BankAccount {
         /*ToDo :
         accountHistory ...
         */
+        history[historyNum++].append(new AccountTransaction(TransactionType.WITHDRAW,amount));
         return this;
     }
     
@@ -60,7 +67,8 @@ public class BankAccount {
         /*ToDo :
         accountHistory ...
         */
-        
+        to.history[historyNum++].append(new AccountTransaction(TransactionType.TRANSFER_OUT,amount));
+        to.history[to.historyNum++].append(new AccountTransaction(TransactionType.TRANSFER_IN,amount));
         return this;
     }
 
